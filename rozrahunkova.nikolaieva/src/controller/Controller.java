@@ -40,7 +40,7 @@ public class Controller {
     static List<RentDate> rentDate = new ArrayList<RentDate>();
 
     static {
-        // в колекції задаємо дати замовлень, площі нерухомості та ціну
+        // РІ РєРѕР»РµРєС†С–С— Р·Р°РґР°С”РјРѕ РґР°С‚Рё Р·Р°РјРѕРІР»РµРЅСЊ, РїР»РѕС‰С– РЅРµСЂСѓС…РѕРјРѕСЃС‚С– С‚Р° С†С–РЅСѓ
         try {
             RentDate salesDate1 = new RentDate(
                     StreamClass.myDateFormat.parse("01.01.2015"), 100,
@@ -193,7 +193,7 @@ public class Controller {
                     throw new MyException("Address " + addressString
                             + " is incorrect!");
 
-                // створення об'єктів Client та Order
+                // СЃС‚РІРѕСЂРµРЅРЅСЏ РѕР±'С”РєС‚С–РІ Client С‚Р° Order
                 Client cl = new Client();
                 cl.setFullName(fullnameString);
                 cl.setTelNumber(telephoneString);
@@ -201,8 +201,8 @@ public class Controller {
                 Order newOrder = new Order(rentDate.get(numberOfDate)
                         .getDateTime(), cl, price, address);
 
-                // перезаписуємо колекцію, щоб не втратити вже існуючі записи в
-                // БД:
+                // РїРµСЂРµР·Р°РїРёСЃСѓС”РјРѕ РєРѕР»РµРєС†С–СЋ, С‰РѕР± РЅРµ РІС‚СЂР°С‚РёС‚Рё РІР¶Рµ С–СЃРЅСѓСЋС‡С– Р·Р°РїРёСЃРё РІ
+                // Р‘Р”:
                 List<Order> collect = StreamClass.readerText(file);
                 collect.add(newOrder);
                 StreamClass.writeText(collect, file);
