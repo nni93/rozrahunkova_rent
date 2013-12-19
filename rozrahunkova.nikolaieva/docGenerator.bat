@@ -1,0 +1,2 @@
+javadoc -d docs -sourcepath ./src src\controller\Controller.java src\model\Client.java src\model\MyException.java src\model\Order.java src\model\RentDate.java src\model\StreamClass.java src\view\ShowType.java
+PAUSE
