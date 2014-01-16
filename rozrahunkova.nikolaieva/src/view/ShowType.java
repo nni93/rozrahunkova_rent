@@ -1,11 +1,11 @@
 package view;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import model.Order;
 
@@ -29,7 +29,7 @@ public class ShowType {
      *             Thrown to indicate that a method has been passed an illegal
      *             or inappropriate argument
      */
-    public static SortedMap<Date, Set<Order>> timeSort(ArrayList<Order> array)
+    public static SortedMap<Date, Set<Order>> timeSort(CopyOnWriteArrayList<Order> array)
             throws IllegalArgumentException {
         if (array.isEmpty())
             throw new IllegalArgumentException("Collection is empty");

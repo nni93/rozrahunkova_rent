@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Class StreamClass intended to describe the static methods of the text write /
@@ -76,7 +76,6 @@ public class StreamClass {
         } finally {
             wr.close();
         }
-
     }
 
     /**
@@ -90,12 +89,13 @@ public class StreamClass {
      *             class is the general class of exceptions produced by failed
      *             or interrupted I/O operations
      */
-    public static ArrayList<Order> readerText(String filename)
+    public static CopyOnWriteArrayList<Order> readerText(String filename)
             throws IOException {
         File f = new File(filename);
         if (!f.exists())
             throw new IOException();
-        ArrayList<Order> array = new ArrayList<Order>();
+        CopyOnWriteArrayList<Order> array = new CopyOnWriteArrayList<Order>();
+        //ArrayList<Order> array = new ArrayList<Order>();
         if (f.length() != 0) {
             Scanner sc = new Scanner(new FileReader(f));
             try {
@@ -116,11 +116,13 @@ public class StreamClass {
                     sc.nextLine();
                     String priceString = sc.nextLine();
                     double price = Double.parseDouble(priceString);
+                    sc.nextLine();
                     String address = sc.nextLine();
                     sc.nextLine();
                     String fullClientName = sc.nextLine();
                     sc.nextLine();
                     String telNumberclient = sc.nextLine();
+                    sc.nextLine();
                     String e_mailclient = sc.nextLine();
 
                     Client someClient = new Client();
@@ -130,6 +132,7 @@ public class StreamClass {
 
                     Order someOrder = new Order(dateOfOrder, someClient, price, address);
                     array.add(someOrder);
+                    
                 }
             } finally {
                 sc.close();

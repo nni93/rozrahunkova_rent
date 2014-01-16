@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
 import model.Client;
@@ -93,6 +95,8 @@ public class Controller {
             } while ((!rez.equalsIgnoreCase("All"))
                     || (!rez.equalsIgnoreCase("Sell"))
                     || (!rez.equalsIgnoreCase("Remove")));
+        } catch (IOException e) {
+            System.out.println("Check file! " + filename);
         } finally {
             if (read != null)
                 read.close();
@@ -116,7 +120,7 @@ public class Controller {
     static boolean checkOrderOnCurrentDate(Date orderDatetoCheck)
             throws IOException, ParseException {
         boolean orderExsists = false;
-        ArrayList<Order> rezultCollection = StreamClass.readerText(filename);
+        CopyOnWriteArrayList<Order> rezultCollection = StreamClass.readerText(filename);
         if (rezultCollection.isEmpty()) {
             System.out.println("No orders");
         } else {
@@ -154,7 +158,6 @@ public class Controller {
                     System.out.println("Select the date and time of order");
                     numberOfDate = Integer.parseInt(reader.nextLine());
                 } catch (NumberFormatException e) {
-                    System.out.println(numberOfDate);
                     System.out.println("Incorrect number!");
                 }
                 if (numberOfDate <= rentDate.size() - 1) {
@@ -232,7 +235,7 @@ public class Controller {
      *             or interrupted I/O operations
      */
     static void showAll(String filename) throws IOException {
-        ArrayList<Order> allCollection = StreamClass.readerText(filename);
+        CopyOnWriteArrayList<Order> allCollection = StreamClass.readerText(filename);
         SortedMap<Date, Set<Order>> rezultMap = view.ShowType
                 .timeSort(allCollection);
         Collection<Date> c = rezultMap.keySet();
@@ -263,29 +266,29 @@ public class Controller {
         if (read == null)
             throw new IllegalArgumentException("empty Stream!");
         System.out
-                .println("Enter client fullName, whose ticket need to remove: ");
+                .println("Enter client fullName, whose order need to remove: ");
         String name = read.nextLine();
         System.out
                 .println("Enter date of this client order: (Use format dd.MM.yyyy)");
         String dateString = read.nextLine();
-        Date dateToRemove;
+        Date dateToRemove;            
         try {
             dateToRemove = StreamClass.myDateFormat.parse(dateString);
-            List<Order> collect = StreamClass.readerText(somefileName);
+            List<Order> collect = Collections.synchronizedList(StreamClass.readerText(somefileName));
             if (!collect.isEmpty()) {
                 for (Order o : collect) {
                     if ((o.getClient().getFullName().equalsIgnoreCase(name))
                             && (o.getDateOfOrder().equals(dateToRemove))) {
-                        collect.remove(o);
+                           collect.remove(o);
                         System.out.println(o.toString() + " was removed!");
-                    }
+                    } 
                     StreamClass.writeText(collect, somefileName);
-                }
+                } 
             }
         } catch (ParseException e) {
             System.out.println("Incorrect date format!");
         } catch (ConcurrentModificationException e) {
-            // System.out.println("Banana banana");
+            System.out.println(e.getMessage() + " ConcurrentModificationException");
         }
     }
 }
